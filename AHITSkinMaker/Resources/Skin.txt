@@ -1,0 +1,10 @@
+class {CLASS} extends Hat_Collectible_Skin;
+
+defaultproperties
+{
+  HUDIcon = Texture2D'{ICON}'
+  ItemName = "{LOCALIZATIONKEY}"
+  ItemQuality = class'{QUALITY}'
+
+{COLORS}
+}

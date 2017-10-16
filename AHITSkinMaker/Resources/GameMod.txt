@@ -1,0 +1,24 @@
+class {MODNAME} extends GameMod
+	config(Mods);
+
+event OnModLoaded()
+{
+  HookActorSpawn(class'Hat_Player', 'Hat_Player');
+  AddSkin();
+}
+
+event OnHookedActorSpawn(Object NewActor, Name Identifier)
+{
+  if (Identifier == 'Hat_Player')
+    AddSkin();
+}
+
+function AddSkin()
+{
+{ADDSKINS}
+}
+
+event OnModUnloaded()
+{
+{REMOVESKINS}
+}
