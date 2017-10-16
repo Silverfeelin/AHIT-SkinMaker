@@ -67,23 +67,24 @@ namespace AHITSkinMaker.Properties {
         ///event OnModLoaded()
         ///{
         ///  HookActorSpawn(class&apos;Hat_Player&apos;, &apos;Hat_Player&apos;);
-        ///  EquipSkin();
+        ///  AddSkin();
         ///}
         ///
         ///event OnHookedActorSpawn(Object NewActor, Name Identifier)
         ///{
         ///  if (Identifier == &apos;Hat_Player&apos;)
-        ///    EquipSkin();
+        ///    AddSkin();
         ///}
         ///
-        ///function EquipSkin()
+        ///function AddSkin()
         ///{
-        ///  Hat_PlayerController(GetALocalPlayerController()).GetLoadout().AddBackpack(class&apos;Hat_Loadout&apos;.static.MakeLoadoutItem(class&apos;{SKINCLASSNAME}&apos;), true);
+        ///{ADDSKINS}
         ///}
         ///
         ///event OnModUnloaded()
         ///{
-        ///  Hat_PlayerController(GetALocalPla [rest of string was truncated]&quot;;.
+        ///{REMOVESKINS}
+        ///}.
         /// </summary>
         internal static string GameMod {
             get {
@@ -99,7 +100,7 @@ namespace AHITSkinMaker.Properties {
         ///version = &quot;1.0.0&quot;
         ///is_cheat = false
         ///modclass = {MODNAME}
-        ///icon = icon.jpg.
+        ///icon = {ICON}.
         /// </summary>
         internal static string Ini {
             get {
@@ -109,7 +110,7 @@ namespace AHITSkinMaker.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to [skins]
-        ///{SKINNAME} = {SKINTEXT}.
+        ///{SKINS}.
         /// </summary>
         internal static string Int {
             get {
@@ -118,12 +119,12 @@ namespace AHITSkinMaker.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to class {SKINCLASSNAME} extends Hat_Collectible_Skin;
+        ///   Looks up a localized string similar to class {CLASS} extends Hat_Collectible_Skin;
         ///
         ///defaultproperties
         ///{
         ///  HUDIcon = Texture2D&apos;{ICON}&apos;
-        ///  ItemName = &quot;{SKINITEMNAME}&quot;
+        ///  ItemName = &quot;{LOCALIZATIONKEY}&quot;
         ///  ItemQuality = class&apos;{QUALITY}&apos;
         ///
         ///{COLORS}
