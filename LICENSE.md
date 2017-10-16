@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2017 
+Copyright (c) 2017 Silverfeelin
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -11,6 +11,9 @@ furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
+
+The copyright notice may not be used in regards to the following listed parts of this Software:
+- `AHITSkinMaker/Resources/Template.png` (source: [Piggybank12 on DeviantArt](https://piggybank12.deviantart.com/art/Hat-Kid-375234966)).
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
