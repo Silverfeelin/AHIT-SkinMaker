@@ -128,13 +128,17 @@ namespace AHITSkinMaker
                 map.Add(m);
 
             }
-            ImageAttributes attr = new ImageAttributes();
-            attr.SetRemapTable(map.ToArray(), ColorAdjustType.Bitmap);
 
-            using (Graphics g = Graphics.FromImage(b))
+            if (map.Count > 0)
             {
-                Rectangle rect = new Rectangle(0, 0, b.Width, b.Height);
-                g.DrawImage(b, rect, 0, 0, rect.Width, rect.Height, GraphicsUnit.Pixel, attr);
+                ImageAttributes attr = new ImageAttributes();
+                attr.SetRemapTable(map.ToArray(), ColorAdjustType.Bitmap);
+
+                using (Graphics g = Graphics.FromImage(b))
+                {
+                    Rectangle rect = new Rectangle(0, 0, b.Width, b.Height);
+                    g.DrawImage(b, rect, 0, 0, rect.Width, rect.Height, GraphicsUnit.Pixel, attr);
+                }
             }
 
             PbxPreview.Image = b;
@@ -153,9 +157,9 @@ namespace AHITSkinMaker
                 LoadColors(b);
                 b.Dispose();
             }
-            catch
+            catch (Exception exc)
             {
-                MessageBox.Show("Could not load image.");
+                MessageBox.Show("Could not load image.\n" + exc.Message);
             }
         }
 
