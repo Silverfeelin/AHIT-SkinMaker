@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 namespace AHITSkinMaker
@@ -20,23 +21,25 @@ namespace AHITSkinMaker
         public MainForm()
         {
             InitializeComponent();
-            
+
             string gameFolder = Properties.Settings.Default.GameFolder;
             if (!string.IsNullOrEmpty(gameFolder))
             {
                 TbxGameFolder.Text = gameFolder;
-                UpdateGameInfo();
+                UpdateGameFolder();
             }
         }
 
+        #region Control Events
+
         private void BtnUpdateGameFolder_Click(object sender, EventArgs e)
         {
-            UpdateGameInfo();
+            UpdateGameFolder();
             Properties.Settings.Default.GameFolder = TbxGameFolder.Text;
             Properties.Settings.Default.Save();
         }
 
-        private void UpdateGameInfo()
+        private void UpdateGameFolder()
         {
             bool valid = true;
             string path = TbxGameFolder.Text;
@@ -49,10 +52,10 @@ namespace AHITSkinMaker
                 BtnCreateMod.Enabled = false;
                 return;
             }
-            
+
             string bit = Environment.Is64BitOperatingSystem ? "Win64" : "Win32";
             TbxEditorExecutablePath.Text = Path.Combine(path, "Binaries\\" + bit + "\\HatinTimeEditor.exe");
-            
+
             if (!File.Exists(TbxEditorExecutablePath.Text))
             {
                 AppendInfo("The Editor executable could not be found. Are you on the modding beta branch?");
@@ -60,142 +63,6 @@ namespace AHITSkinMaker
             }
 
             BtnCreateMod.Enabled = valid;
-        }
-
-        private void AppendInfo(string text, params object[] args)
-        {
-            TbxInfo.AppendText(string.Format(text, args) + Environment.NewLine);
-            TbxInfo.SelectionStart = TbxInfo.Text.Length;
-            TbxInfo.ScrollToCaret();
-        }
-
-        private void BtnCreateMod_Click(object sender, EventArgs e)
-        {
-            BtnCompile.Enabled = false;
-            BtnCook.Enabled = false;
-
-            string modName = TbxModName.Text,
-                gameFolder = TbxGameFolder.Text;
-
-            bool valid = true;
-
-            if (string.IsNullOrWhiteSpace(modName) || modName.Contains(" "))
-            {
-                AppendInfo("Please enter a mod name without spaces.");
-                valid = false;
-            }
-            if (LbxSkins.Items.Count == 0)
-            {
-                AppendInfo("Please add one or more skins.");
-                valid = false;
-            }
-
-            if (!valid) return;
-
-            AppendInfo("Hang tight.. this will take a while.");
-            
-            // Modfolder
-            lastModDirectory = Directory.CreateDirectory(Path.Combine(gameFolder, "HatinTimeGame\\Mods", modName + "_" + Guid.NewGuid().ToString("N").Substring(0, 4)));
-            string modFolderPath = lastModDirectory.FullName;
-
-            modName = modName.EndsWith("Mod") ? modName : modName + "Mod";
-
-            // Modinfo.ini
-            string modIni = Properties.Resources.Ini.Replace("{MODNAME}", modName);
-            if (!string.IsNullOrWhiteSpace(modIconPath))
-            {
-                string modIconFileName = "icon" + Path.GetExtension(modIconPath);
-                File.Copy(modIconPath, Path.Combine(modFolderPath, modIconFileName));
-                modIni = modIni.Replace("{ICON}", modIconFileName);
-            }
-            else
-            {
-                modIni = modIni.Replace("{ICON}", "icon.jpg");
-            }
-            File.WriteAllText(Path.Combine(modFolderPath, "modinfo.ini"), modIni);
-
-            // Classes folder
-            string classesFolderPath = Path.Combine(modFolderPath, "Classes");
-            Directory.CreateDirectory(classesFolderPath);
-            
-            // GameMod class
-            string gameMod = Properties.Resources.GameMod.Replace("{MODNAME}", modName);
-            string gameModAddSkins = "";
-            string gameModRemoveSkins = "";
-
-            // Int file
-            string intPath = Path.Combine(modFolderPath, "Localization\\INT");
-            string localization = Properties.Resources.Int;
-            string localizationSkins = "";
-
-            // Skins
-            foreach (var item in LbxSkins.Items)
-            {
-                // Create class
-                Skin s = item as Skin;
-                File.WriteAllText(Path.Combine(classesFolderPath, s.ClassName + ".uc"), s.ToClass());
-
-                // Add to GameMod
-                gameModAddSkins += ("Hat_PlayerController(GetALocalPlayerController()).GetLoadout().AddBackpack(class'Hat_Loadout'.static.MakeLoadoutItem(class'{SKINCLASSNAME}'), false);\n").Replace("{SKINCLASSNAME}", s.ClassName);
-                gameModRemoveSkins += ("Hat_PlayerController(GetALocalPlayerController()).GetLoadout().RemoveBackpack(class'Hat_Loadout'.static.MakeLoadoutItem(class'{SKINCLASSNAME}', class'Hat_ItemQuality_SearchAny'));\n").Replace("{SKINCLASSNAME}", s.ClassName);
-
-                // Add to INT
-                localizationSkins += string.Format("{0} = {1}\n", s.TextLocalizationKey, s.Text);
-            }
-
-            // Save GameMod
-            gameMod = gameMod.Replace("{ADDSKINS}", gameModAddSkins).Replace("{REMOVESKINS}", gameModRemoveSkins);
-            File.WriteAllText(Path.Combine(classesFolderPath, modName + ".uc"), gameMod);
-
-            // Save INT
-            localization = localization.Replace("{SKINS}", localizationSkins);
-            Directory.CreateDirectory(intPath);
-            File.WriteAllText(Path.Combine(intPath, "collectibles.int"), localization);
-
-            AppendInfo("Done! Though compiling and cooking has yet to be added.");
-            BtnCompile.Enabled = true;
-        }
-
-        public static int Clamp(int v, int low, int high)
-        {
-            return v < low ? low : v > high ? high : v;
-        }
-
-        private void BtnCompile_Click(object sender, EventArgs e)
-        {
-            if (!lastModDirectory.Exists)
-            {
-                AppendInfo("Mod directory does not exist!");
-                BtnCompile.Enabled = false;
-                return;
-            }
-
-            AppendInfo("Compiling...");
-
-            Process p = new Process();
-            ProcessStartInfo psi = new ProcessStartInfo();
-            p.StartInfo = psi;
-            psi.FileName = TbxEditorExecutablePath.Text;
-            psi.Arguments = "make -full";
-            p.Start();
-            
-            p.WaitForExit();
-            AppendInfo("Compiling done. If there are no errors or warnings, you can cook the mod now.");
-            BtnCook.Enabled = true;
-        }
-
-        private void BtnCook_Click(object sender, EventArgs e)
-        {
-            Process p = new Process();
-            ProcessStartInfo psi = new ProcessStartInfo();
-            p.StartInfo = psi;
-            psi.FileName = TbxEditorExecutablePath.Text;
-            psi.Arguments = "CookPackages -MODSONLY -platform=PC";
-            p.Start();
-            p.PriorityClass = ProcessPriorityClass.AboveNormal;
-            p.WaitForExit();
-
-            AppendInfo("Cooking done. Your mod should now work in-game!");
         }
 
         private void BtnAddSkin_Click(object sender, EventArgs e)
@@ -215,6 +82,115 @@ namespace AHITSkinMaker
             }
         }
 
+        private void BtnCreateMod_Click(object sender, EventArgs e)
+        {
+            BtnCompile.Enabled = false;
+            BtnCook.Enabled = false;
+
+            string modName = TbxModName.Text,
+                gameFolder = TbxGameFolder.Text;
+
+            // Check input validity
+            bool valid = true;
+
+            if (string.IsNullOrWhiteSpace(modName) || modName.Contains(" "))
+            {
+                AppendInfo("Please enter a mod name without spaces.");
+                valid = false;
+            }
+            if (LbxSkins.Items.Count == 0)
+            {
+                AppendInfo("Please add one or more skins.");
+                valid = false;
+            }
+
+            if (!valid) return;
+
+            // Update / New mod
+            bool updateMod = false;
+
+            if (lastModDirectory != null && lastModDirectory.Exists)
+            {
+                if (MessageBox.Show("Do you want to update the existing folder instead of creating a new one? This will wipe the existing data!",
+                    "Warning",
+                    MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    updateMod = true;
+                }
+            }
+
+            AppendInfo("This should only take a second...");
+
+            // Create modFolder
+            if (!updateMod)
+            {
+                lastModDirectory = Directory.CreateDirectory(Path.Combine(gameFolder, "HatinTimeGame\\Mods", modName + "_" + Guid.NewGuid().ToString("N").Substring(0, 4)));
+            }
+
+            // Create subfolders
+            RecreateSubDirectories(lastModDirectory);
+
+            // Append Mod to mod name
+            modName = modName.EndsWith("Mod") ? modName : modName + "Mod";
+
+            // Skins
+            List<Skin> skins = new List<Skin>(LbxSkins.Items.Count);
+            foreach (var item in LbxSkins.Items)
+            {
+                skins.Add(item as Skin);
+            }
+
+            // Create modinfo.ini
+            AppendInfo("Saving modinfo.ini...");
+            CreateModIni(lastModDirectory, modName, modIconPath);
+
+            // GameMod class
+            AppendInfo("Saving GameMod class...");
+            CreateGameMod(lastModDirectory, modName, skins);
+
+            // Int file
+            AppendInfo("Saving localization file...");
+            CreateLocalizationFile(lastModDirectory, skins);
+
+            // Skin classes
+            AppendInfo("Saving Skin classes...");
+            SaveSkins(lastModDirectory, skins);
+
+            AppendInfo("Done! Though compiling and cooking has yet to be added.");
+            BtnCompile.Enabled = true;
+        }
+
+        private void BtnCompile_Click(object sender, EventArgs e)
+        {
+            if (!lastModDirectory.Exists)
+            {
+                AppendInfo("Mod directory does not exist!");
+                BtnCompile.Enabled = false;
+                return;
+            }
+
+            AppendInfo("Compiling. Close the window after it says it is done.");
+            CompileMod(lastModDirectory, new FileInfo(TbxEditorExecutablePath.Text));
+            AppendInfo("Compiling done. If there are no errors or warnings, you can cook the mod now.");
+
+            BtnCook.Enabled = true;
+        }
+
+        private void BtnCook_Click(object sender, EventArgs e)
+        {
+            if (!lastModDirectory.Exists)
+            {
+                AppendInfo("Mod directory does not exist!");
+                BtnCompile.Enabled = false;
+                BtnCook.Enabled = false;
+                return;
+            }
+
+            AppendInfo("Cooking. Close the window after it says it is done. This will take a while!");
+            CookMod(lastModDirectory, new FileInfo(TbxEditorExecutablePath.Text));
+            AppendInfo("Cooking done. Your mod should now work in-game!");
+        }
+
         private void LbxSkins_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (LbxSkins.SelectedIndex == -1)
@@ -228,18 +204,13 @@ namespace AHITSkinMaker
             }
         }
 
-        private void UpdatePreview(Dictionary<SkinColors, Color> colors)
-        {
-            PbxPreview.Image = TemplateManager.CreatePreview(colors);
-        }
-
         private void BtnSelectIcon_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Image Files|*.png;*.bmp;*.jpg";
 
             if (ofd.ShowDialog() != DialogResult.OK) return;
-            
+
             try
             {
                 Bitmap c;
@@ -279,5 +250,136 @@ namespace AHITSkinMaker
                 LbxSkins.Items[LbxSkins.SelectedIndex] = LbxSkins.Items[LbxSkins.SelectedIndex]; // Why ;-; (Refreshes text)
             }
         }
+
+        #endregion
+
+        private void AppendInfo(string text, params object[] args)
+        {
+            TbxInfo.AppendText(string.Format(text, args) + Environment.NewLine);
+            TbxInfo.SelectionStart = TbxInfo.Text.Length;
+            TbxInfo.ScrollToCaret();
+        }
+
+        private void RecreateSubDirectories(DirectoryInfo modDirectory)
+        {
+            string skinFolder = Path.Combine(modDirectory.FullName, "Classes\\Collectibles\\Skins"),
+                gameModFolder = Path.Combine(modDirectory.FullName, "Classes\\GameMod"),
+                intFolder = Path.Combine(modDirectory.FullName, "Localization\\INT");
+
+            if (Directory.Exists(skinFolder)) Directory.Delete(skinFolder, true);
+            if (Directory.Exists(gameModFolder)) Directory.Delete(gameModFolder, true);
+            if (Directory.Exists(intFolder)) Directory.Delete(intFolder, true);
+
+            Directory.CreateDirectory(skinFolder);
+            Directory.CreateDirectory(gameModFolder);
+            Directory.CreateDirectory(intFolder);
+        }
+
+        private void CreateModIni(DirectoryInfo modDirectory, string modName, string iconPath = null)
+        {
+            string modIni = Properties.Resources.Ini;
+            modIni = modIni.Replace("{MODNAME}", modName);
+
+            if (!string.IsNullOrWhiteSpace(iconPath))
+            {
+                // Copy icon to mod folder
+                string modIconFileName = "icon" + Path.GetExtension(iconPath);
+                File.Copy(iconPath, Path.Combine(modDirectory.FullName, modIconFileName));
+                modIni = modIni.Replace("{ICON}", modIconFileName);
+            }
+            else
+            {
+                // Set default.
+                modIni = modIni.Replace("{ICON}", "icon.jpg");
+            }
+
+            File.WriteAllText(Path.Combine(modDirectory.FullName, "modinfo.ini"), modIni);
+        }
+
+        private void CreateGameMod(DirectoryInfo modDirectory, string modClassName, ICollection<Skin> skins)
+        {
+            // GameMod class
+            string gameMod = Properties.Resources.GameMod;
+
+            gameMod = gameMod.Replace("{MODNAME}", modClassName);
+
+            StringBuilder addSkins = new StringBuilder(),
+                removeSkins = new StringBuilder();
+
+            foreach (Skin s in skins)
+            {
+                addSkins.Append(("Hat_PlayerController(GetALocalPlayerController()).GetLoadout().AddBackpack(class'Hat_Loadout'.static.MakeLoadoutItem(class'{SKINCLASSNAME}'), false);\n").Replace("{SKINCLASSNAME}", s.ClassName));
+                removeSkins.Append(("Hat_PlayerController(GetALocalPlayerController()).GetLoadout().RemoveBackpack(class'Hat_Loadout'.static.MakeLoadoutItem(class'{SKINCLASSNAME}', class'Hat_ItemQuality_SearchAny'));\n").Replace("{SKINCLASSNAME}", s.ClassName));
+            }
+
+            gameMod = gameMod.Replace("{ADDSKINS}", addSkins.ToString());
+            gameMod = gameMod.Replace("{REMOVESKINS}", removeSkins.ToString());
+            
+            File.WriteAllText(Path.Combine(modDirectory.FullName, "Classes\\GameMod", modClassName + ".uc"), gameMod);
+        }
+
+        private void CreateLocalizationFile(DirectoryInfo modDirectory, ICollection<Skin> skins)
+        {
+            if (skins.Count == 0) return;
+
+            string localization = Properties.Resources.Int;
+            StringBuilder s = new StringBuilder();
+
+            foreach (Skin skin in skins)
+            {
+                s.AppendFormat("{0} = {1}\n", skin.TextLocalizationKey, skin.Text);
+            }
+
+            localization = localization.Replace("{SKINS}", s.ToString());
+
+            string path = Path.Combine(modDirectory.FullName, "Localization\\INT\\collectibles.int");
+            File.WriteAllText(path, localization);
+        }
+
+        /// <summary>
+        /// Saves skins to class files to the given directory.
+        /// </summary>
+        private void SaveSkins(DirectoryInfo modDirectory, ICollection<Skin> skins)
+        {
+            DirectoryInfo skinDirectory = new DirectoryInfo(Path.Combine(modDirectory.FullName, "Classes\\Collectibles\\Skins"));
+
+            foreach (Skin skin in skins)
+            {
+                string path = Path.Combine(skinDirectory.FullName, skin.ClassName + ".uc");
+                File.WriteAllText(path, skin.ToClass());
+            }
+        }
+
+        private void CompileMod(DirectoryInfo modDir, FileInfo fileEditor)
+        {
+            Process p = new Process();
+            ProcessStartInfo psi = new ProcessStartInfo();
+            p.StartInfo = psi;
+            psi.FileName = fileEditor.FullName;
+            psi.Arguments = "make -full";
+            p.Start();
+
+            p.WaitForExit();
+        }
+
+        private void CookMod(DirectoryInfo modDir, FileInfo fileEditor)
+        {
+            Process p = new Process();
+            ProcessStartInfo psi = new ProcessStartInfo();
+            p.StartInfo = psi;
+            psi.FileName = fileEditor.FullName;
+            psi.Arguments = "CookPackages -MODSONLY -platform=PC";
+
+            p.Start();
+            p.PriorityClass = ProcessPriorityClass.High;
+
+            p.WaitForExit();
+        }
+
+        private void UpdatePreview(Dictionary<SkinColors, Color> colors)
+        {
+            PbxPreview.Image = TemplateManager.CreatePreview(colors);
+        }
+
     }
 }
