@@ -13,7 +13,7 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 
 The copyright notice may not be used in regards to the following listed parts of this Software:
-- `AHITSkinMaker/Resources/Template.png` (source: [Piggybank12 on DeviantArt](https://piggybank12.deviantart.com/art/Hat-Kid-375234966)).
+- `AHITSkinMaker/Resources/Template.png` (image: [Piggybank12 on DeviantArt](https://piggybank12.deviantart.com/art/Hat-Kid-375234966), font: [Hobo by Chucklefish Ltd.](https://chucklefish.org/)).
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
