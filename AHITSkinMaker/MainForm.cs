@@ -120,11 +120,11 @@ namespace AHITSkinMaker
             {
                 string modIconFileName = "icon" + Path.GetExtension(modIconPath);
                 File.Copy(modIconPath, Path.Combine(modFolderPath, modIconFileName));
-                modIni.Replace("{ICON}", modIconFileName);
+                modIni = modIni.Replace("{ICON}", modIconFileName);
             }
             else
             {
-                modIni.Replace("{ICON}", "icon.jpg");
+                modIni = modIni.Replace("{ICON}", "icon.jpg");
             }
             File.WriteAllText(Path.Combine(modFolderPath, "modinfo.ini"), modIni);
 
