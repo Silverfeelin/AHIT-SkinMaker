@@ -41,18 +41,25 @@
             this.TbxInfo = new System.Windows.Forms.RichTextBox();
             this.PbxPreview = new System.Windows.Forms.PictureBox();
             this.GbxSkinModInformation = new System.Windows.Forms.GroupBox();
+            this.TbxDescription = new System.Windows.Forms.TextBox();
+            this.LblDescription = new System.Windows.Forms.Label();
+            this.TbxAuthor = new System.Windows.Forms.TextBox();
+            this.LblAuthor = new System.Windows.Forms.Label();
             this.LblSkins = new System.Windows.Forms.Label();
             this.PbxIcon = new System.Windows.Forms.PictureBox();
             this.BtnSelectIcon = new System.Windows.Forms.Button();
             this.LblModIcon = new System.Windows.Forms.Label();
             this.LytButtons = new System.Windows.Forms.TableLayoutPanel();
+            this.BtnChangeSkin = new System.Windows.Forms.Button();
             this.BtnRemoveSkin = new System.Windows.Forms.Button();
             this.BtnAddSkin = new System.Windows.Forms.Button();
             this.LbxSkins = new System.Windows.Forms.ListBox();
             this.TbxModName = new System.Windows.Forms.TextBox();
             this.LblModName = new System.Windows.Forms.Label();
             this.TTip = new System.Windows.Forms.ToolTip(this.components);
-            this.BtnChangeSkin = new System.Windows.Forms.Button();
+            this.TbxVisualModName = new System.Windows.Forms.TextBox();
+            this.LblVisualModName = new System.Windows.Forms.Label();
+            this.BtnOpenFolder = new System.Windows.Forms.Button();
             this.GbxGameInformation.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PbxPreview)).BeginInit();
             this.GbxSkinModInformation.SuspendLayout();
@@ -71,7 +78,7 @@
             this.GbxGameInformation.Controls.Add(this.BtnUpdateGameFolder);
             this.GbxGameInformation.Location = new System.Drawing.Point(12, 12);
             this.GbxGameInformation.Name = "GbxGameInformation";
-            this.GbxGameInformation.Size = new System.Drawing.Size(928, 80);
+            this.GbxGameInformation.Size = new System.Drawing.Size(708, 80);
             this.GbxGameInformation.TabIndex = 0;
             this.GbxGameInformation.TabStop = false;
             this.GbxGameInformation.Text = "Game Information";
@@ -83,7 +90,7 @@
             this.TbxEditorExecutablePath.Location = new System.Drawing.Point(105, 47);
             this.TbxEditorExecutablePath.Name = "TbxEditorExecutablePath";
             this.TbxEditorExecutablePath.ReadOnly = true;
-            this.TbxEditorExecutablePath.Size = new System.Drawing.Size(817, 20);
+            this.TbxEditorExecutablePath.Size = new System.Drawing.Size(597, 20);
             this.TbxEditorExecutablePath.TabIndex = 8;
             // 
             // LblEditorExecutable
@@ -101,7 +108,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TbxGameFolder.Location = new System.Drawing.Point(82, 21);
             this.TbxGameFolder.Name = "TbxGameFolder";
-            this.TbxGameFolder.Size = new System.Drawing.Size(717, 20);
+            this.TbxGameFolder.Size = new System.Drawing.Size(497, 20);
             this.TbxGameFolder.TabIndex = 0;
             // 
             // LblGameFolder
@@ -116,7 +123,7 @@
             // BtnUpdateGameFolder
             // 
             this.BtnUpdateGameFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnUpdateGameFolder.Location = new System.Drawing.Point(805, 19);
+            this.BtnUpdateGameFolder.Location = new System.Drawing.Point(585, 19);
             this.BtnUpdateGameFolder.Name = "BtnUpdateGameFolder";
             this.BtnUpdateGameFolder.Size = new System.Drawing.Size(117, 23);
             this.BtnUpdateGameFolder.TabIndex = 1;
@@ -132,8 +139,8 @@
             this.BtnCreateMod.Enabled = false;
             this.BtnCreateMod.Location = new System.Drawing.Point(3, 37);
             this.BtnCreateMod.Name = "BtnCreateMod";
-            this.BtnCreateMod.Size = new System.Drawing.Size(203, 28);
-            this.BtnCreateMod.TabIndex = 2;
+            this.BtnCreateMod.Size = new System.Drawing.Size(96, 28);
+            this.BtnCreateMod.TabIndex = 3;
             this.BtnCreateMod.Text = "Create Mod";
             this.BtnCreateMod.UseVisualStyleBackColor = true;
             this.BtnCreateMod.Click += new System.EventHandler(this.BtnCreateMod_Click);
@@ -144,10 +151,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.BtnCook.Enabled = false;
-            this.BtnCook.Location = new System.Drawing.Point(422, 37);
+            this.BtnCook.Location = new System.Drawing.Point(309, 37);
             this.BtnCook.Name = "BtnCook";
-            this.BtnCook.Size = new System.Drawing.Size(205, 28);
-            this.BtnCook.TabIndex = 4;
+            this.BtnCook.Size = new System.Drawing.Size(98, 28);
+            this.BtnCook.TabIndex = 6;
             this.BtnCook.Text = "Cook";
             this.BtnCook.UseVisualStyleBackColor = true;
             this.BtnCook.Click += new System.EventHandler(this.BtnCook_Click);
@@ -158,10 +165,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.BtnCompile.Enabled = false;
-            this.BtnCompile.Location = new System.Drawing.Point(212, 37);
+            this.BtnCompile.Location = new System.Drawing.Point(207, 37);
             this.BtnCompile.Name = "BtnCompile";
-            this.BtnCompile.Size = new System.Drawing.Size(204, 28);
-            this.BtnCompile.TabIndex = 3;
+            this.BtnCompile.Size = new System.Drawing.Size(96, 28);
+            this.BtnCompile.TabIndex = 5;
             this.BtnCompile.Text = "Compile";
             this.BtnCompile.UseVisualStyleBackColor = true;
             this.BtnCompile.Click += new System.EventHandler(this.BtnCompile_Click);
@@ -171,10 +178,10 @@
             this.TbxInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.TbxInfo.Location = new System.Drawing.Point(12, 428);
+            this.TbxInfo.Location = new System.Drawing.Point(12, 494);
             this.TbxInfo.Name = "TbxInfo";
             this.TbxInfo.ReadOnly = true;
-            this.TbxInfo.Size = new System.Drawing.Size(928, 113);
+            this.TbxInfo.Size = new System.Drawing.Size(708, 102);
             this.TbxInfo.TabIndex = 3;
             this.TbxInfo.Text = "";
             this.TbxInfo.WordWrap = false;
@@ -183,7 +190,7 @@
             // 
             this.PbxPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.PbxPreview.Image = global::AHITSkinMaker.Properties.Resources.Template;
-            this.PbxPreview.Location = new System.Drawing.Point(660, 98);
+            this.PbxPreview.Location = new System.Drawing.Point(440, 98);
             this.PbxPreview.Name = "PbxPreview";
             this.PbxPreview.Size = new System.Drawing.Size(280, 324);
             this.PbxPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -196,6 +203,12 @@
             // 
             this.GbxSkinModInformation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.GbxSkinModInformation.Controls.Add(this.LblVisualModName);
+            this.GbxSkinModInformation.Controls.Add(this.TbxVisualModName);
+            this.GbxSkinModInformation.Controls.Add(this.TbxDescription);
+            this.GbxSkinModInformation.Controls.Add(this.LblDescription);
+            this.GbxSkinModInformation.Controls.Add(this.TbxAuthor);
+            this.GbxSkinModInformation.Controls.Add(this.LblAuthor);
             this.GbxSkinModInformation.Controls.Add(this.LblSkins);
             this.GbxSkinModInformation.Controls.Add(this.PbxIcon);
             this.GbxSkinModInformation.Controls.Add(this.BtnSelectIcon);
@@ -206,15 +219,54 @@
             this.GbxSkinModInformation.Controls.Add(this.LblModName);
             this.GbxSkinModInformation.Location = new System.Drawing.Point(12, 98);
             this.GbxSkinModInformation.Name = "GbxSkinModInformation";
-            this.GbxSkinModInformation.Size = new System.Drawing.Size(642, 324);
+            this.GbxSkinModInformation.Size = new System.Drawing.Size(422, 390);
             this.GbxSkinModInformation.TabIndex = 1;
             this.GbxSkinModInformation.TabStop = false;
             this.GbxSkinModInformation.Text = "Skin Mod Information";
             // 
+            // TbxDescription
+            // 
+            this.TbxDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TbxDescription.Location = new System.Drawing.Point(75, 97);
+            this.TbxDescription.Name = "TbxDescription";
+            this.TbxDescription.Size = new System.Drawing.Size(341, 20);
+            this.TbxDescription.TabIndex = 3;
+            this.TbxDescription.Text = "Change Me!";
+            // 
+            // LblDescription
+            // 
+            this.LblDescription.AutoSize = true;
+            this.LblDescription.Location = new System.Drawing.Point(6, 100);
+            this.LblDescription.Name = "LblDescription";
+            this.LblDescription.Size = new System.Drawing.Size(63, 13);
+            this.LblDescription.TabIndex = 29;
+            this.LblDescription.Text = "Description:";
+            // 
+            // TbxAuthor
+            // 
+            this.TbxAuthor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TbxAuthor.Location = new System.Drawing.Point(53, 71);
+            this.TbxAuthor.Name = "TbxAuthor";
+            this.TbxAuthor.Size = new System.Drawing.Size(363, 20);
+            this.TbxAuthor.TabIndex = 2;
+            this.TbxAuthor.Text = "<Serialized>";
+            this.TbxAuthor.TextChanged += new System.EventHandler(this.TbxAuthor_TextChanged);
+            // 
+            // LblAuthor
+            // 
+            this.LblAuthor.AutoSize = true;
+            this.LblAuthor.Location = new System.Drawing.Point(6, 74);
+            this.LblAuthor.Name = "LblAuthor";
+            this.LblAuthor.Size = new System.Drawing.Size(41, 13);
+            this.LblAuthor.TabIndex = 27;
+            this.LblAuthor.Text = "Author:";
+            // 
             // LblSkins
             // 
             this.LblSkins.AutoSize = true;
-            this.LblSkins.Location = new System.Drawing.Point(174, 50);
+            this.LblSkins.Location = new System.Drawing.Point(171, 118);
             this.LblSkins.Name = "LblSkins";
             this.LblSkins.Size = new System.Drawing.Size(36, 13);
             this.LblSkins.TabIndex = 25;
@@ -223,7 +275,7 @@
             // PbxIcon
             // 
             this.PbxIcon.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.PbxIcon.Location = new System.Drawing.Point(9, 74);
+            this.PbxIcon.Location = new System.Drawing.Point(7, 152);
             this.PbxIcon.Name = "PbxIcon";
             this.PbxIcon.Size = new System.Drawing.Size(159, 159);
             this.PbxIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -232,10 +284,10 @@
             // 
             // BtnSelectIcon
             // 
-            this.BtnSelectIcon.Location = new System.Drawing.Point(67, 45);
+            this.BtnSelectIcon.Location = new System.Drawing.Point(64, 123);
             this.BtnSelectIcon.Name = "BtnSelectIcon";
             this.BtnSelectIcon.Size = new System.Drawing.Size(101, 23);
-            this.BtnSelectIcon.TabIndex = 1;
+            this.BtnSelectIcon.TabIndex = 4;
             this.BtnSelectIcon.Text = "Select Icon...";
             this.BtnSelectIcon.UseVisualStyleBackColor = true;
             this.BtnSelectIcon.Click += new System.EventHandler(this.BtnSelectIcon_Click);
@@ -243,7 +295,7 @@
             // LblModIcon
             // 
             this.LblModIcon.AutoSize = true;
-            this.LblModIcon.Location = new System.Drawing.Point(6, 51);
+            this.LblModIcon.Location = new System.Drawing.Point(3, 128);
             this.LblModIcon.Name = "LblModIcon";
             this.LblModIcon.Size = new System.Drawing.Size(55, 13);
             this.LblModIcon.TabIndex = 22;
@@ -253,34 +305,48 @@
             // 
             this.LytButtons.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.LytButtons.ColumnCount = 3;
-            this.LytButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
-            this.LytButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.34F));
-            this.LytButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
-            this.LytButtons.Controls.Add(this.BtnChangeSkin, 1, 0);
-            this.LytButtons.Controls.Add(this.BtnCook, 2, 1);
-            this.LytButtons.Controls.Add(this.BtnRemoveSkin, 2, 0);
-            this.LytButtons.Controls.Add(this.BtnCompile, 1, 1);
+            this.LytButtons.ColumnCount = 4;
+            this.LytButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.LytButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.LytButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.LytButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.LytButtons.Controls.Add(this.BtnCook, 3, 1);
+            this.LytButtons.Controls.Add(this.BtnCompile, 2, 1);
+            this.LytButtons.Controls.Add(this.BtnRemoveSkin, 3, 0);
+            this.LytButtons.Controls.Add(this.BtnChangeSkin, 2, 0);
+            this.LytButtons.Controls.Add(this.BtnAddSkin, 1, 0);
+            this.LytButtons.Controls.Add(this.BtnOpenFolder, 1, 1);
             this.LytButtons.Controls.Add(this.BtnCreateMod, 0, 1);
-            this.LytButtons.Controls.Add(this.BtnAddSkin, 0, 0);
-            this.LytButtons.Location = new System.Drawing.Point(6, 250);
+            this.LytButtons.Location = new System.Drawing.Point(6, 316);
             this.LytButtons.Name = "LytButtons";
             this.LytButtons.RowCount = 2;
             this.LytButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.LytButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.LytButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.LytButtons.Size = new System.Drawing.Size(630, 68);
-            this.LytButtons.TabIndex = 3;
+            this.LytButtons.Size = new System.Drawing.Size(410, 68);
+            this.LytButtons.TabIndex = 6;
+            // 
+            // BtnChangeSkin
+            // 
+            this.BtnChangeSkin.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnChangeSkin.Location = new System.Drawing.Point(207, 3);
+            this.BtnChangeSkin.Name = "BtnChangeSkin";
+            this.BtnChangeSkin.Size = new System.Drawing.Size(96, 28);
+            this.BtnChangeSkin.TabIndex = 1;
+            this.BtnChangeSkin.Text = "Change Skin";
+            this.BtnChangeSkin.UseVisualStyleBackColor = true;
+            this.BtnChangeSkin.Click += new System.EventHandler(this.BtnChangeSkin_Click);
             // 
             // BtnRemoveSkin
             // 
             this.BtnRemoveSkin.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnRemoveSkin.Location = new System.Drawing.Point(422, 3);
+            this.BtnRemoveSkin.Location = new System.Drawing.Point(309, 3);
             this.BtnRemoveSkin.Name = "BtnRemoveSkin";
-            this.BtnRemoveSkin.Size = new System.Drawing.Size(205, 28);
-            this.BtnRemoveSkin.TabIndex = 1;
+            this.BtnRemoveSkin.Size = new System.Drawing.Size(98, 28);
+            this.BtnRemoveSkin.TabIndex = 2;
             this.BtnRemoveSkin.Text = "Remove Skin";
             this.BtnRemoveSkin.UseVisualStyleBackColor = true;
             this.BtnRemoveSkin.Click += new System.EventHandler(this.BtnRemoveSkin_Click);
@@ -290,9 +356,9 @@
             this.BtnAddSkin.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnAddSkin.Location = new System.Drawing.Point(3, 3);
+            this.BtnAddSkin.Location = new System.Drawing.Point(105, 3);
             this.BtnAddSkin.Name = "BtnAddSkin";
-            this.BtnAddSkin.Size = new System.Drawing.Size(203, 28);
+            this.BtnAddSkin.Size = new System.Drawing.Size(96, 28);
             this.BtnAddSkin.TabIndex = 0;
             this.BtnAddSkin.Text = "Add Skin";
             this.BtnAddSkin.UseVisualStyleBackColor = true;
@@ -304,48 +370,69 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.LbxSkins.FormattingEnabled = true;
-            this.LbxSkins.Location = new System.Drawing.Point(174, 68);
+            this.LbxSkins.Location = new System.Drawing.Point(174, 134);
             this.LbxSkins.Name = "LbxSkins";
-            this.LbxSkins.Size = new System.Drawing.Size(462, 173);
-            this.LbxSkins.TabIndex = 2;
+            this.LbxSkins.Size = new System.Drawing.Size(242, 173);
+            this.LbxSkins.TabIndex = 5;
             this.LbxSkins.SelectedIndexChanged += new System.EventHandler(this.LbxSkins_SelectedIndexChanged);
             // 
             // TbxModName
             // 
             this.TbxModName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.TbxModName.Location = new System.Drawing.Point(74, 19);
+            this.TbxModName.Location = new System.Drawing.Point(102, 19);
             this.TbxModName.Name = "TbxModName";
-            this.TbxModName.Size = new System.Drawing.Size(562, 20);
+            this.TbxModName.Size = new System.Drawing.Size(314, 20);
             this.TbxModName.TabIndex = 0;
+            this.TbxModName.Text = "MySkinMod";
             // 
             // LblModName
             // 
             this.LblModName.AutoSize = true;
             this.LblModName.Location = new System.Drawing.Point(6, 22);
             this.LblModName.Name = "LblModName";
-            this.LblModName.Size = new System.Drawing.Size(62, 13);
+            this.LblModName.Size = new System.Drawing.Size(90, 13);
             this.LblModName.TabIndex = 9;
-            this.LblModName.Text = "Mod Name:";
+            this.LblModName.Text = "Mod Class Name:";
             // 
-            // BtnChangeSkin
+            // TbxVisualModName
             // 
-            this.BtnChangeSkin.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.TbxVisualModName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TbxVisualModName.Location = new System.Drawing.Point(74, 45);
+            this.TbxVisualModName.Name = "TbxVisualModName";
+            this.TbxVisualModName.Size = new System.Drawing.Size(339, 20);
+            this.TbxVisualModName.TabIndex = 1;
+            this.TbxVisualModName.Text = "Change Me!";
+            // 
+            // LblVisualModName
+            // 
+            this.LblVisualModName.AutoSize = true;
+            this.LblVisualModName.Location = new System.Drawing.Point(6, 48);
+            this.LblVisualModName.Name = "LblVisualModName";
+            this.LblVisualModName.Size = new System.Drawing.Size(62, 13);
+            this.LblVisualModName.TabIndex = 31;
+            this.LblVisualModName.Text = "Mod Name:";
+            // 
+            // BtnOpenFolder
+            // 
+            this.BtnOpenFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnChangeSkin.Location = new System.Drawing.Point(212, 3);
-            this.BtnChangeSkin.Name = "BtnChangeSkin";
-            this.BtnChangeSkin.Size = new System.Drawing.Size(204, 28);
-            this.BtnChangeSkin.TabIndex = 5;
-            this.BtnChangeSkin.Text = "Change Skin";
-            this.BtnChangeSkin.UseVisualStyleBackColor = true;
-            this.BtnChangeSkin.Click += new System.EventHandler(this.BtnChangeSkin_Click);
+            this.BtnOpenFolder.Enabled = false;
+            this.BtnOpenFolder.Location = new System.Drawing.Point(105, 37);
+            this.BtnOpenFolder.Name = "BtnOpenFolder";
+            this.BtnOpenFolder.Size = new System.Drawing.Size(96, 28);
+            this.BtnOpenFolder.TabIndex = 4;
+            this.BtnOpenFolder.Text = "Open Folder";
+            this.BtnOpenFolder.UseVisualStyleBackColor = true;
+            this.BtnOpenFolder.Click += new System.EventHandler(this.BtnOpenFolder_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(952, 553);
+            this.ClientSize = new System.Drawing.Size(732, 608);
             this.Controls.Add(this.GbxSkinModInformation);
             this.Controls.Add(this.PbxPreview);
             this.Controls.Add(this.TbxInfo);
@@ -391,6 +478,13 @@
         private System.Windows.Forms.PictureBox PbxIcon;
         private System.Windows.Forms.ToolTip TTip;
         private System.Windows.Forms.Button BtnChangeSkin;
+        private System.Windows.Forms.TextBox TbxDescription;
+        private System.Windows.Forms.Label LblDescription;
+        private System.Windows.Forms.TextBox TbxAuthor;
+        private System.Windows.Forms.Label LblAuthor;
+        private System.Windows.Forms.TextBox TbxVisualModName;
+        private System.Windows.Forms.Label LblVisualModName;
+        private System.Windows.Forms.Button BtnOpenFolder;
     }
 }
 

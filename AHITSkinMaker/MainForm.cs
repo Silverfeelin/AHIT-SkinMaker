@@ -15,7 +15,20 @@ namespace AHITSkinMaker
 {
     public partial class MainForm : Form
     {
-        DirectoryInfo lastModDirectory;
+        DirectoryInfo _lastModDirectory;
+        DirectoryInfo LastModDirectory
+        {
+            get
+            {
+                return _lastModDirectory;
+            }
+            set
+            {
+                _lastModDirectory = value;
+                BtnOpenFolder.Enabled = value != null;
+            }
+        }
+
         string modIconPath;
 
         public MainForm()
@@ -28,6 +41,8 @@ namespace AHITSkinMaker
                 TbxGameFolder.Text = gameFolder;
                 UpdateGameFolder();
             }
+
+            TbxAuthor.Text = Properties.Settings.Default.Author;
         }
 
         #region Control Events
@@ -88,7 +103,10 @@ namespace AHITSkinMaker
             BtnCook.Enabled = false;
 
             string modName = TbxModName.Text,
-                gameFolder = TbxGameFolder.Text;
+                gameFolder = TbxGameFolder.Text,
+                author = TbxAuthor.Text,
+                visualModName = TbxVisualModName.Text,
+                description = TbxDescription.Text;
 
             // Check input validity
             bool valid = true;
@@ -103,13 +121,17 @@ namespace AHITSkinMaker
                 AppendInfo("Please add one or more skins.");
                 valid = false;
             }
+            if (string.IsNullOrWhiteSpace(visualModName))
+                visualModName = "Change Me!";
+            if (string.IsNullOrWhiteSpace(author))
+                author = "Change Me!";
 
             if (!valid) return;
 
             // Update / New mod
             bool updateMod = false;
 
-            if (lastModDirectory != null && lastModDirectory.Exists)
+            if (LastModDirectory != null && LastModDirectory.Exists)
             {
                 if (MessageBox.Show("Do you want to update the existing folder instead of creating a new one? This will wipe the existing data!",
                     "Warning",
@@ -124,11 +146,11 @@ namespace AHITSkinMaker
             // Create modFolder
             if (!updateMod)
             {
-                lastModDirectory = Directory.CreateDirectory(Path.Combine(gameFolder, "HatinTimeGame\\Mods", modName + "_" + Guid.NewGuid().ToString("N").Substring(0, 4)));
+                LastModDirectory = Directory.CreateDirectory(Path.Combine(gameFolder, "HatinTimeGame\\Mods", modName + "_" + Guid.NewGuid().ToString("N").Substring(0, 4)));
             }
 
             // Create subfolders
-            RecreateSubDirectories(lastModDirectory);
+            RecreateSubDirectories(LastModDirectory);
 
             // Append Mod to mod name
             modName = modName.EndsWith("Mod") ? modName : modName + "Mod";
@@ -142,19 +164,19 @@ namespace AHITSkinMaker
 
             // Create modinfo.ini
             AppendInfo("Saving modinfo.ini...");
-            CreateModIni(lastModDirectory, modName, modIconPath);
+            CreateModIni(LastModDirectory, modName, visualModName, author, description, modIconPath);
 
             // GameMod class
             AppendInfo("Saving GameMod class...");
-            CreateGameMod(lastModDirectory, modName, skins);
+            CreateGameMod(LastModDirectory, modName, skins);
 
             // Int file
             AppendInfo("Saving localization file...");
-            CreateLocalizationFile(lastModDirectory, skins);
+            CreateLocalizationFile(LastModDirectory, skins);
 
             // Skin classes
             AppendInfo("Saving Skin classes...");
-            SaveSkins(lastModDirectory, skins);
+            SaveSkins(LastModDirectory, skins);
 
             AppendInfo("Done! Though compiling and cooking has yet to be added.");
             BtnCompile.Enabled = true;
@@ -162,7 +184,7 @@ namespace AHITSkinMaker
 
         private void BtnCompile_Click(object sender, EventArgs e)
         {
-            if (!lastModDirectory.Exists)
+            if (!LastModDirectory.Exists)
             {
                 AppendInfo("Mod directory does not exist!");
                 BtnCompile.Enabled = false;
@@ -170,7 +192,7 @@ namespace AHITSkinMaker
             }
 
             AppendInfo("Compiling. Close the window after it says it is done.");
-            CompileMod(lastModDirectory, new FileInfo(TbxEditorExecutablePath.Text));
+            CompileMod(LastModDirectory, new FileInfo(TbxEditorExecutablePath.Text));
             AppendInfo("Compiling done. If there are no errors or warnings, you can cook the mod now.");
 
             BtnCook.Enabled = true;
@@ -178,7 +200,7 @@ namespace AHITSkinMaker
 
         private void BtnCook_Click(object sender, EventArgs e)
         {
-            if (!lastModDirectory.Exists)
+            if (!LastModDirectory.Exists)
             {
                 AppendInfo("Mod directory does not exist!");
                 BtnCompile.Enabled = false;
@@ -187,7 +209,7 @@ namespace AHITSkinMaker
             }
 
             AppendInfo("Cooking. Close the window after it says it is done. This will take a while!");
-            CookMod(lastModDirectory, new FileInfo(TbxEditorExecutablePath.Text));
+            CookMod(LastModDirectory, new FileInfo(TbxEditorExecutablePath.Text));
             AppendInfo("Cooking done. Your mod should now work in-game!");
         }
 
@@ -251,6 +273,20 @@ namespace AHITSkinMaker
             }
         }
 
+        private void TbxAuthor_TextChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Author = TbxAuthor.Text;
+            Properties.Settings.Default.Save();
+        }
+
+        private void BtnOpenFolder_Click(object sender, EventArgs e)
+        {
+            if (LastModDirectory != null && LastModDirectory.Exists)
+            {
+                Process.Start(LastModDirectory.FullName);
+            }
+        }
+
         #endregion
 
         private void AppendInfo(string text, params object[] args)
@@ -275,10 +311,13 @@ namespace AHITSkinMaker
             Directory.CreateDirectory(intFolder);
         }
 
-        private void CreateModIni(DirectoryInfo modDirectory, string modName, string iconPath = null)
+        private void CreateModIni(DirectoryInfo modDirectory, string modName, string visualModName, string author, string description, string iconPath = null)
         {
             string modIni = Properties.Resources.Ini;
             modIni = modIni.Replace("{MODNAME}", modName);
+            modIni = modIni.Replace("{NAME}", visualModName);
+            modIni = modIni.Replace("{AUTHOR}", author);
+            modIni = modIni.Replace("{DESCRIPTION}", description);
 
             if (!string.IsNullOrWhiteSpace(iconPath))
             {
@@ -380,6 +419,5 @@ namespace AHITSkinMaker
         {
             PbxPreview.Image = TemplateManager.CreatePreview(colors);
         }
-
     }
 }

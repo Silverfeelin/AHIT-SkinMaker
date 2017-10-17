@@ -1,7 +1,7 @@
 [Info]
-name = "Change Me!"
-author = "Change Me!"
-description = "Change Me!"
+name = "{NAME}"
+author = "{AUTHOR}"
+description = "{DESCRIPTION}"
 version = "1.0.0"
 is_cheat = false
 modclass = {MODNAME}

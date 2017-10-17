@@ -34,5 +34,17 @@ namespace AHITSkinMaker.Properties {
                 this["GameFolder"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Change Me!")]
+        public string Author {
+            get {
+                return ((string)(this["Author"]));
+            }
+            set {
+                this["Author"] = value;
+            }
+        }
     }
 }
