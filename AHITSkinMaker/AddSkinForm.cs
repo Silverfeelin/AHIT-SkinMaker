@@ -16,22 +16,8 @@ namespace AHITSkinMaker
 {
     public partial class AddSkinForm : Form
     {
-        public static Dictionary<SkinColors, Point> PalettePositions { get; } = new Dictionary<SkinColors, Point>()
-        {
-            { SkinColors.SkinColor_Hat, new Point(8, 150) },
-            { SkinColors.SkinColor_HatAlt, new Point(8, 166) },
-            { SkinColors.SkinColor_HatBand, new Point(8, 182) },
-            { SkinColors.SkinColor_Dress, new Point(8, 198) },
-            { SkinColors.SkinColor_Cape, new Point(8, 214) },
-            { SkinColors.SkinColor_Pants, new Point(8, 230) },
-            { SkinColors.SkinColor_Shoes, new Point(8, 246) },
-            { SkinColors.SkinColor_ShoesBottom, new Point(8, 262) },
-            { SkinColors.SkinColor_Zipper, new Point(8, 278) },
-            { SkinColors.SkinColor_Orange, new Point(8, 294) },
-            { SkinColors.SkinColor_Hair, new Point(8, 310) }
-        };
-
-        public Dictionary<SkinColors, Color> Colors { get; set; }
+        
+        
         public Skin Result { get; set; }
 
         Dictionary<SkinColors, Control> colorButtons;
@@ -41,9 +27,7 @@ namespace AHITSkinMaker
             InitializeComponent();
 
             Bitmap template = Properties.Resources.Template;
-
-            Colors = new Dictionary<SkinColors, Color>();
-
+            
             colorButtons = new Dictionary<SkinColors, Control>();
             colorButtons[SkinColors.SkinColor_Hat] = PbxSelectHat;
             colorButtons[SkinColors.SkinColor_HatAlt] = PbxSelectHatAlt;
@@ -59,6 +43,8 @@ namespace AHITSkinMaker
 
             CbxIcon.SelectedIndex = 0;
             CbxQuality.SelectedIndex = 0;
+            
+            Result = new Skin(new Dictionary<SkinColors, Color>());
         }
 
         public AddSkinForm(string modName = null) : this()
@@ -67,22 +53,39 @@ namespace AHITSkinMaker
                 TbxSkinClassName.Text = string.Format("{0}_Collectible_Skin_{1}", modName, Guid.NewGuid().ToString("N").Substring(0, 4));
         }
 
+        public AddSkinForm(Skin skin) : this()
+        {
+            Result = skin;
+            TbxSkinClassName.Text = skin.ClassName;
+            TbxSkinNameText.Text = skin.Text;
+            CbxIcon.Text = skin.IconPath;
+            CbxQuality.Text = skin.QualityClass;
+
+            UpdatePreview(skin.Colors);
+
+            foreach (var kv in skin.Colors)
+            {
+                colorButtons[kv.Key].BackColor = kv.Value;
+            }
+        }
+
         private void SelectColor_Click(object sender, EventArgs e)
         {
+            Control control = (Control)sender;
+            ColorDialog.Color = control.BackColor;
+
             if (ColorDialog.ShowDialog() != DialogResult.OK) return;
 
             Color color = ColorDialog.Color;
-
-            Control control = (Control)sender;
-            control.BackColor = ColorDialog.Color;
+            control.BackColor = color;
 
             SkinColors skinColor;
             if (Enum.TryParse(control.Tag.ToString(), out skinColor))
             {
-                Colors[skinColor] = color;
+                Result.Colors[skinColor] = color;
             }
 
-            UpdatePreview();
+            UpdatePreview(Result.Colors);
         }
 
         private void LoadColors(Bitmap b)
@@ -90,58 +93,22 @@ namespace AHITSkinMaker
             for (int i = 0; i < 11; i++)
             {
                 SkinColors sc = (SkinColors)i;
-                Point p = PalettePositions[sc];
+                Point p = TemplateManager.PalettePositions[sc];
                 Color c = b.GetPixel(p.X, p.Y);
                 colorButtons[sc].BackColor = c;
 
                 if (c != Properties.Resources.Template.GetPixel(p.X, p.Y))
-                    Colors[sc] = c;
+                    Result.Colors[sc] = c;
                 else
-                    Colors.Remove(sc);
+                    Result.Colors.Remove(sc);
             }
 
-            UpdatePreview();
+            UpdatePreview(Result.Colors);
         }
-
-        private void UpdatePreview()
+        
+        private void UpdatePreview(Dictionary<SkinColors, Color> colors)
         {
-            Bitmap b = new Bitmap(Properties.Resources.Template);
-            List<ColorMap> map = new List<ColorMap>();
-
-            for (int i = 0; i < 11; i++)
-            {
-                SkinColors s = (SkinColors)i;
-
-                if (!Colors.ContainsKey(s)) continue;
-
-                Point p = PalettePositions[s];
-                Color oldColor = b.GetPixel(p.X, p.Y),
-                    newColor = Colors[s];
-
-                if (oldColor == newColor)
-                    continue;
-
-                ColorMap m = new ColorMap();
-                m.OldColor = oldColor;
-                m.NewColor = newColor;
-
-                map.Add(m);
-
-            }
-
-            if (map.Count > 0)
-            {
-                ImageAttributes attr = new ImageAttributes();
-                attr.SetRemapTable(map.ToArray(), ColorAdjustType.Bitmap);
-
-                using (Graphics g = Graphics.FromImage(b))
-                {
-                    Rectangle rect = new Rectangle(0, 0, b.Width, b.Height);
-                    g.DrawImage(b, rect, 0, 0, rect.Width, rect.Height, GraphicsUnit.Pixel, attr);
-                }
-            }
-
-            PbxPreview.Image = b;
+            PbxPreview.Image = TemplateManager.CreatePreview(colors);
         }
 
         private void BtnLoadImage_Click(object sender, EventArgs e)
@@ -198,7 +165,7 @@ namespace AHITSkinMaker
             {
                 error += "- Enter an icon texture path, or select a default one. The path may not contain spaces.\n";
             }
-            if (Colors.Count == 0)
+            if (Result.Colors.Count == 0)
             {
                 error += "- Modify at least one color.\n";
             }
@@ -210,13 +177,10 @@ namespace AHITSkinMaker
                 return;
             }
 
-            Result = new Skin(Colors)
-            {
-                ClassName = className,
-                Text = skinText,
-                QualityClass = quality,
-                IconPath = iconPath
-            };
+            Result.ClassName = className;
+            Result.Text = skinText;
+            Result.QualityClass = quality;
+            Result.IconPath = iconPath;
 
             DialogResult = DialogResult.OK;
         }

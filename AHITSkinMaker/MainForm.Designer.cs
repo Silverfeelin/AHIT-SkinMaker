@@ -52,6 +52,7 @@
             this.TbxModName = new System.Windows.Forms.TextBox();
             this.LblModName = new System.Windows.Forms.Label();
             this.TTip = new System.Windows.Forms.ToolTip(this.components);
+            this.BtnChangeSkin = new System.Windows.Forms.Button();
             this.GbxGameInformation.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PbxPreview)).BeginInit();
             this.GbxSkinModInformation.SuspendLayout();
@@ -256,16 +257,18 @@
             this.LytButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
             this.LytButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.34F));
             this.LytButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
+            this.LytButtons.Controls.Add(this.BtnChangeSkin, 1, 0);
             this.LytButtons.Controls.Add(this.BtnCook, 2, 1);
             this.LytButtons.Controls.Add(this.BtnRemoveSkin, 2, 0);
             this.LytButtons.Controls.Add(this.BtnCompile, 1, 1);
             this.LytButtons.Controls.Add(this.BtnCreateMod, 0, 1);
-            this.LytButtons.Controls.Add(this.BtnAddSkin, 1, 0);
+            this.LytButtons.Controls.Add(this.BtnAddSkin, 0, 0);
             this.LytButtons.Location = new System.Drawing.Point(6, 250);
             this.LytButtons.Name = "LytButtons";
             this.LytButtons.RowCount = 2;
             this.LytButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.LytButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.LytButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.LytButtons.Size = new System.Drawing.Size(630, 68);
             this.LytButtons.TabIndex = 3;
             // 
@@ -287,9 +290,9 @@
             this.BtnAddSkin.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnAddSkin.Location = new System.Drawing.Point(212, 3);
+            this.BtnAddSkin.Location = new System.Drawing.Point(3, 3);
             this.BtnAddSkin.Name = "BtnAddSkin";
-            this.BtnAddSkin.Size = new System.Drawing.Size(204, 28);
+            this.BtnAddSkin.Size = new System.Drawing.Size(203, 28);
             this.BtnAddSkin.TabIndex = 0;
             this.BtnAddSkin.Text = "Add Skin";
             this.BtnAddSkin.UseVisualStyleBackColor = true;
@@ -297,6 +300,9 @@
             // 
             // LbxSkins
             // 
+            this.LbxSkins.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.LbxSkins.FormattingEnabled = true;
             this.LbxSkins.Location = new System.Drawing.Point(174, 68);
             this.LbxSkins.Name = "LbxSkins";
@@ -322,6 +328,19 @@
             this.LblModName.TabIndex = 9;
             this.LblModName.Text = "Mod Name:";
             // 
+            // BtnChangeSkin
+            // 
+            this.BtnChangeSkin.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnChangeSkin.Location = new System.Drawing.Point(212, 3);
+            this.BtnChangeSkin.Name = "BtnChangeSkin";
+            this.BtnChangeSkin.Size = new System.Drawing.Size(204, 28);
+            this.BtnChangeSkin.TabIndex = 5;
+            this.BtnChangeSkin.Text = "Change Skin";
+            this.BtnChangeSkin.UseVisualStyleBackColor = true;
+            this.BtnChangeSkin.Click += new System.EventHandler(this.BtnChangeSkin_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -331,6 +350,7 @@
             this.Controls.Add(this.PbxPreview);
             this.Controls.Add(this.TbxInfo);
             this.Controls.Add(this.GbxGameInformation);
+            this.MinimumSize = new System.Drawing.Size(594, 470);
             this.Name = "MainForm";
             this.Text = "A Hat in Time Skin Maker";
             this.GbxGameInformation.ResumeLayout(false);
@@ -370,6 +390,7 @@
         private System.Windows.Forms.Label LblSkins;
         private System.Windows.Forms.PictureBox PbxIcon;
         private System.Windows.Forms.ToolTip TTip;
+        private System.Windows.Forms.Button BtnChangeSkin;
     }
 }
 

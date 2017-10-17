@@ -3,6 +3,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -13,21 +14,6 @@ namespace AHITSkinMaker
 {
     public partial class MainForm : Form
     {
-        public static Dictionary<int, string> SkinColors = new Dictionary<int, string>()
-        {
-            { 0, "SkinColor_Dress" },
-            { 1, "SkinColor_Cape" },
-            { 2, "SkinColor_Pants" },
-            { 3, "SkinColor_Shoes" },
-            { 4, "SkinColor_ShoesBottom" },
-            { 5, "SkinColor_Zipper" },
-            { 6, "SkinColor_Hair" },
-            { 7, "SkinColor_Orange" },
-            { 8, "SkinColor_Hat" },
-            { 9, "SkinColor_HatAlt" },
-            { 10, "SkinColor_HatBand" }
-        };
-
         DirectoryInfo lastModDirectory;
         string modIconPath;
 
@@ -206,6 +192,7 @@ namespace AHITSkinMaker
             psi.FileName = TbxEditorExecutablePath.Text;
             psi.Arguments = "CookPackages -MODSONLY -platform=PC";
             p.Start();
+            p.PriorityClass = ProcessPriorityClass.AboveNormal;
             p.WaitForExit();
 
             AppendInfo("Cooking done. Your mod should now work in-game!");
@@ -217,6 +204,7 @@ namespace AHITSkinMaker
             if (asf.ShowDialog() != DialogResult.OK) return;
 
             LbxSkins.Items.Add(asf.Result);
+            LbxSkins.SelectedIndex = LbxSkins.Items.Count - 1;
         }
 
         private void BtnRemoveSkin_Click(object sender, EventArgs e)
@@ -242,40 +230,7 @@ namespace AHITSkinMaker
 
         private void UpdatePreview(Dictionary<SkinColors, Color> colors)
         {
-            // TODO: Repeated code in AddSkinForm -> Move to helper class
-            Bitmap b = new Bitmap(Properties.Resources.Template);
-            List<ColorMap> map = new List<ColorMap>();
-
-            for (int i = 0; i < 11; i++)
-            {
-                SkinColors s = (SkinColors)i;
-
-                if (!colors.ContainsKey(s)) continue;
-
-                Point p = AddSkinForm.PalettePositions[s];
-                Color oldColor = b.GetPixel(p.X, p.Y),
-                    newColor = colors[s];
-
-                if (oldColor == newColor)
-                    continue;
-
-                ColorMap m = new ColorMap();
-                m.OldColor = oldColor;
-                m.NewColor = newColor;
-
-                map.Add(m);
-
-            }
-            ImageAttributes attr = new ImageAttributes();
-            attr.SetRemapTable(map.ToArray(), ColorAdjustType.Bitmap);
-
-            using (Graphics g = Graphics.FromImage(b))
-            {
-                Rectangle rect = new Rectangle(0, 0, b.Width, b.Height);
-                g.DrawImage(b, rect, 0, 0, rect.Width, rect.Height, GraphicsUnit.Pixel, attr);
-            }
-
-            PbxPreview.Image = b;
+            PbxPreview.Image = TemplateManager.CreatePreview(colors);
         }
 
         private void BtnSelectIcon_Click(object sender, EventArgs e)
@@ -284,8 +239,7 @@ namespace AHITSkinMaker
             ofd.Filter = "Image Files|*.png;*.bmp;*.jpg";
 
             if (ofd.ShowDialog() != DialogResult.OK) return;
-
-            bool valid = true;
+            
             try
             {
                 Bitmap c;
@@ -298,7 +252,6 @@ namespace AHITSkinMaker
                 {
                     MessageBox.Show("Mod icon must have equal dimensions (I.e. 512x512)!");
                     modIconPath = null;
-                    return;
                 }
                 else
                 {
@@ -309,6 +262,21 @@ namespace AHITSkinMaker
             catch
             {
                 MessageBox.Show("Could not load image.");
+                modIconPath = null;
+            }
+        }
+
+        private void BtnChangeSkin_Click(object sender, EventArgs e)
+        {
+            Skin s = LbxSkins.SelectedItem as Skin;
+            if (s != null)
+            {
+                AddSkinForm asf = new AddSkinForm(s);
+                asf.ShowDialog();
+
+                LbxSkins.Refresh();
+                UpdatePreview(s.Colors);
+                LbxSkins.Items[LbxSkins.SelectedIndex] = LbxSkins.Items[LbxSkins.SelectedIndex]; // Why ;-; (Refreshes text)
             }
         }
     }

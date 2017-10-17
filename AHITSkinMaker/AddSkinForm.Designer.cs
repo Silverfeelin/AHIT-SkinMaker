@@ -28,7 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddSkinForm));
             this.GbxSkinModInformation = new System.Windows.Forms.GroupBox();
+            this.BtnGenerateClassName = new System.Windows.Forms.Button();
             this.BtnCancel = new System.Windows.Forms.Button();
             this.BtnSave = new System.Windows.Forms.Button();
             this.BtnSaveTemplate = new System.Windows.Forms.Button();
@@ -55,7 +57,7 @@
             this.TbxSkinClassName = new System.Windows.Forms.TextBox();
             this.LblSkinName = new System.Windows.Forms.Label();
             this.ColorDialog = new System.Windows.Forms.ColorDialog();
-            this.BtnGenerateClassName = new System.Windows.Forms.Button();
+            this.LblDescription = new System.Windows.Forms.Label();
             this.GbxSkinModInformation.SuspendLayout();
             this.PnlPreview.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PbxSelectHair)).BeginInit();
@@ -77,6 +79,7 @@
             this.GbxSkinModInformation.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.GbxSkinModInformation.Controls.Add(this.LblDescription);
             this.GbxSkinModInformation.Controls.Add(this.BtnGenerateClassName);
             this.GbxSkinModInformation.Controls.Add(this.BtnCancel);
             this.GbxSkinModInformation.Controls.Add(this.BtnSave);
@@ -97,6 +100,17 @@
             this.GbxSkinModInformation.TabIndex = 3;
             this.GbxSkinModInformation.TabStop = false;
             this.GbxSkinModInformation.Text = "Skin Mod Information";
+            // 
+            // BtnGenerateClassName
+            // 
+            this.BtnGenerateClassName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnGenerateClassName.Location = new System.Drawing.Point(410, 17);
+            this.BtnGenerateClassName.Name = "BtnGenerateClassName";
+            this.BtnGenerateClassName.Size = new System.Drawing.Size(85, 23);
+            this.BtnGenerateClassName.TabIndex = 1;
+            this.BtnGenerateClassName.Text = "Generate";
+            this.BtnGenerateClassName.UseVisualStyleBackColor = true;
+            this.BtnGenerateClassName.Click += new System.EventHandler(this.BtnGenerateClassName_Click);
             // 
             // BtnCancel
             // 
@@ -403,16 +417,13 @@
             this.LblSkinName.TabIndex = 11;
             this.LblSkinName.Text = "Skin Class Name:";
             // 
-            // BtnGenerateClassName
+            // LblDescription
             // 
-            this.BtnGenerateClassName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnGenerateClassName.Location = new System.Drawing.Point(410, 17);
-            this.BtnGenerateClassName.Name = "BtnGenerateClassName";
-            this.BtnGenerateClassName.Size = new System.Drawing.Size(85, 23);
-            this.BtnGenerateClassName.TabIndex = 1;
-            this.BtnGenerateClassName.Text = "Generate";
-            this.BtnGenerateClassName.UseVisualStyleBackColor = true;
-            this.BtnGenerateClassName.Click += new System.EventHandler(this.BtnGenerateClassName_Click);
+            this.LblDescription.Location = new System.Drawing.Point(3, 185);
+            this.LblDescription.Name = "LblDescription";
+            this.LblDescription.Size = new System.Drawing.Size(206, 198);
+            this.LblDescription.TabIndex = 22;
+            this.LblDescription.Text = resources.GetString("LblDescription.Text");
             // 
             // AddSkinForm
             // 
@@ -472,5 +483,6 @@
         private System.Windows.Forms.Button BtnCancel;
         private System.Windows.Forms.Button BtnSave;
         private System.Windows.Forms.Button BtnGenerateClassName;
+        private System.Windows.Forms.Label LblDescription;
     }
 }
