@@ -35,6 +35,7 @@ namespace AHITSkinMaker
             foreach (KeyValuePair<SkinColors, Color> item in Colors)
             {
                 Color c = item.Value;
+                if (c == Color.Black) c = Color.FromArgb(1, 1, 1);
                 colors += string.Format("  SkinColor[{0}] = (R={1}, G={2}, B={3})", item.Key, c.R, c.G, c.B) + Environment.NewLine;
             }
             
