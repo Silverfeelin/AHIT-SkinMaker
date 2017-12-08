@@ -348,7 +348,7 @@ namespace AHITSkinMaker
             foreach (Skin s in skins)
             {
                 addSkins.Append(("Hat_PlayerController(GetALocalPlayerController()).GetLoadout().AddBackpack(class'Hat_Loadout'.static.MakeLoadoutItem(class'{SKINCLASSNAME}'), false);\n").Replace("{SKINCLASSNAME}", s.ClassName));
-                removeSkins.Append(("Hat_PlayerController(GetALocalPlayerController()).GetLoadout().RemoveBackpack(class'Hat_Loadout'.static.MakeLoadoutItem(class'{SKINCLASSNAME}', class'Hat_ItemQuality_SearchAny'));\n").Replace("{SKINCLASSNAME}", s.ClassName));
+                removeSkins.Append(("Hat_PlayerController(GetALocalPlayerController()).GetLoadout().RemoveBackpack(class'Hat_Loadout'.static.MakeLoadoutItem(class'{SKINCLASSNAME}', class'Hat_CosmeticItemQualityInfo_SearchAny'));\n").Replace("{SKINCLASSNAME}", s.ClassName));
             }
 
             gameMod = gameMod.Replace("{ADDSKINS}", addSkins.ToString());
